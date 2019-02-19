@@ -1,0 +1,14 @@
+{
+    "production": {
+      "driver": "pg",
+      "ssl": "true"
+    },
+    "dev": {
+      "driver": "pg",
+      "user": "postgres",
+      "password": "postgres",
+      "host": "localhost",
+      "database": "posapp",
+      "schema": "public"
+    }
+}
