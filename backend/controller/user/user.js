@@ -1,5 +1,5 @@
 
-const ModelUser         = require("./../../model/user");
+const ModelUser         = require("./../../model/user/user");
 
 const HelperResponse    = require("./../../helper/response");
 const HelperValudation  = require("./../../helper/validation");
@@ -39,12 +39,10 @@ module.exports = client => {
 
     //getUser
     module.getUser = async (req, res) =>{
-        console.log("req.query.id:"+req.query.id);
         req.query.id = parseInt(req.query.id);
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid Parameter id");
         try{
-            console.log("in try");
             const user = await modelUser.selectUser(
                 "id",
                 req.params.id
