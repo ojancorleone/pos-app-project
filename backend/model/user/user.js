@@ -25,7 +25,7 @@ module.exports = client =>{
     };
 
     //insertUser
-    module.inserUser    = async body => {
+    module.insertUser    = async body => {
         const user  = await client.query(
             "INSERT INTO users (username, firstname, lastname, email, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, firstname, lastname, email, role, created_at, updated_at;",
             [body.username, body.firstname, body.lastname, body.email, body.role]

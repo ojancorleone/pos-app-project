@@ -2,13 +2,15 @@ const ModelProduct      = require("./../../model/product/product");
 const HelperResponse    = require("./../../helper/response");
 const HelperValidation  = require("./../../helper/validation");
 
-module.export = client => {
+module.exports = client => {
     
     let module = {};
    
     module.mandatoryFields = [
         "name",
-        "category",
+        "description",
+        "category_id",
+        "stock",
         "price",
         "image_url"
     ];
@@ -19,8 +21,6 @@ module.export = client => {
 
     //getProducts
     module.getProducts = async (req, res) => {
-        req.query.items_per_page = parseInt(req.query.items_per_page);
-        req.query.page          = parseInt(req.query.page);
         if(req.params.items_per_page <= 0 || req.params.page < 0)
             return reply.badRequest(req, res, "Invalid parameter item_per_page or page");
         try{
@@ -36,7 +36,6 @@ module.export = client => {
 
     //getProduct
     module.getProduct = async (req, res) => {
-        req.query.id    = parseInt(req.query.id);
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{
@@ -52,7 +51,7 @@ module.export = client => {
 
     //postProduct
     module.postProduct = async (req, res) => {
-        if(!validate.allMandatoryFieldsExists(req.body, mandatoryFields))
+        if(!validate.allMandatoryFieldsExists(req.body, module.mandatoryFields))
             return reply.badRequest(req, res, "Invalid parameter request");
         try{
             const product = await modelProduct.insertProduct(req.body);
@@ -64,7 +63,6 @@ module.export = client => {
 
     //patchProduct
     module.patchProduct = async (req, res) => {
-        req.query.id = parseInt(req.query.id);
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{
@@ -77,7 +75,6 @@ module.export = client => {
 
     //deleteProduct
     module.deleteProduct = async (req, res) => {
-        req.query.id = parseInt(req.query.id);
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{

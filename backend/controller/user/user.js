@@ -22,8 +22,6 @@ module.exports = client => {
 
     //getUsers
     module.getUsers = async (req, res) => {
-        req.query.item_per_page = parseInt(req.query.item_per_page);
-        req.query.page          = parseInt(req.query.page);
         if(req.params.item_per_page <= 0)
             return reply.badRequest(req, res, "Invalid Parameter item_per_page or page");
         try {
@@ -39,7 +37,7 @@ module.exports = client => {
 
     //getUser
     module.getUser = async (req, res) =>{
-        req.query.id = parseInt(req.query.id);
+
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid Parameter id");
         try{
@@ -70,7 +68,7 @@ module.exports = client => {
 
     //patchUser
     module.patchUser = async (req, res) => {
-        req.query.id = parseInt(req.query.id);
+
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{
@@ -83,7 +81,6 @@ module.exports = client => {
 
     //deleteUser
     module.deleteUser = async (req, res) =>{
-        req.query.id = parseInt(req.query.id);
         if(req.params.id <= 0){
             return reply.badRequest(req, res, "Invalid parameter id");
         };
