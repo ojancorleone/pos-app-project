@@ -4,16 +4,17 @@ const http              = require("http");
 const express           = require("express");
 const session           = require("express-session");
 const bodyParser        = require("body-parser");
-const redisConfig       = require('redis');
+const Redis             = require('redis');
 
 /** Initialization Helper */
 const HelperResponse    = require("./helper/response");
 
 /** Initialization Controller */
-const Redis             = require("./controller/redis/redis");
+const CacheRedis        = require("./controller/cacheRedis/cacheRedis");
 
 /** Start Application Running */
 const app = express();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
     next();
   });
 
-const clientRedis = redisConfig.createClient(process.env.CACHE_PORT, process.env.CACHE_URL);
+const client = Redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL);
 
 app.use(express.json());
 app.use(
@@ -39,20 +40,18 @@ app.use(
     })
 );
 
-server    = http.createServer(app);
-const redis     = Redis(clientRedis, redisConfig);
+server      = http.createServer(app);
+const redis = CacheRedis(client, Redis);
 
 //Service Redis
 app.get("/redis/:id", redis.getCache);
 app.post("/redis", redis.postCache);
-
 
 const reply = HelperResponse();
 app.all("*", (req, res) => {
   return reply.notFound(req, res, "invalid route");
 });
 
-const port = process.env.PORT || 8080;
-module.exports = server.listen(port, () => {
+module.exports = server.listen(process.env.PORT || 8080, () => {
     console.log("Redis App Getting Started");
 });
