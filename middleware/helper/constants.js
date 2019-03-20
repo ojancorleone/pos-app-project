@@ -1,5 +1,5 @@
 module.exports = {
-    GREETING_MESSAGE : "::: backend pos-app is ready to rock !! :::",
+    GREETING_MESSAGE : "::: middleware pos-app is ready to rock !! :::",
     BASE_URL : "api",
     ACCESS : {
         ADMINISTRATOR : {

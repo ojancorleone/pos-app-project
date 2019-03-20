@@ -6,8 +6,10 @@ const session           = require("express-session");
 const bodyParser        = require("body-parser");
 const Redis             = require('redis');
 
+
 /** Initialization Helper */
 const HelperResponse    = require("./helper/response");
+const Constant          = require("./helper/constants");
 
 /** Initialization Controller */
 const CacheRedis        = require("./controller/cacheRedis/cacheRedis");
@@ -52,6 +54,8 @@ app.all("*", (req, res) => {
   return reply.notFound(req, res, "invalid route");
 });
 
-module.exports = server.listen(process.env.PORT || 8080, () => {
-    console.log("Redis App Getting Started");
+const port = process.env.PORT || 8080;
+module.exports = server.listen(port, () => {
+    console.log(Constant.GREETING_MESSAGE);
+    console.log(`::::: opened port ${port} :::::`);
 });
