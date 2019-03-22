@@ -1,6 +1,7 @@
 const ModelProduct      = require("./../../model/product/product");
 const HelperResponse    = require("./../../helper/response");
 const HelperValidation  = require("./../../helper/validation");
+const HelperPermission  = require("./../../helper/permission");
 
 module.exports = client => {
     
@@ -18,9 +19,12 @@ module.exports = client => {
     const modelProduct  = ModelProduct(client);
     const reply         = HelperResponse();
     const validate      = HelperValidation();
+    const permission    = HelperPermission();
 
     //getProducts
     module.getProducts = async (req, res) => {
+        if(!permission.validateHandShake(req.body.keyword, "getProducts"))
+            return reply.unauthorized(req, res, "Invalid Keywords");
         if(req.params.items_per_page <= 0 || req.params.page < 0)
             return reply.badRequest(req, res, "Invalid parameter item_per_page or page");
         try{
@@ -36,6 +40,8 @@ module.exports = client => {
 
     //getProduct
     module.getProduct = async (req, res) => {
+        if(!permission.validateHandShake(req.body.keyword, "getProduct"))
+            return reply.unauthorized(req, res, "Invalid Keywords");
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{
@@ -51,6 +57,8 @@ module.exports = client => {
 
     //postProduct
     module.postProduct = async (req, res) => {
+        if(!permission.validateHandShake(req.body.keyword, "postProduct"))
+            return reply.unauthorized(req, res, "Invalid Keywords");
         if(!validate.allMandatoryFieldsExists(req.body, module.mandatoryFields))
             return reply.badRequest(req, res, "Invalid parameter request");
         try{
@@ -63,6 +71,8 @@ module.exports = client => {
 
     //patchProduct
     module.patchProduct = async (req, res) => {
+        if(!permission.validateHandShake(req.body.keyword, "patchProduct"))
+            return reply.unauthorized(req, res, "Invalid Keywords");
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{
@@ -75,6 +85,8 @@ module.exports = client => {
 
     //deleteProduct
     module.deleteProduct = async (req, res) => {
+        if(!permission.validateHandShake(req.body.keyword, "deleteProduct"))
+            return reply.unauthorized(req, res, "Invalid Keywords");
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{
