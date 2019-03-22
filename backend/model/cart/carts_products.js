@@ -49,10 +49,10 @@ module.exports = client => {
   
     module.checkProductCartExists = async (cart_id, product_id) => {
         const product = await client.query(
-            "SELECT * FROM carts_products WHERE cart_id=$1 AND product_id =$2",
+            "SELECT 1 FROM carts_products WHERE cart_id=$1 AND product_id =$2",
             [cart_id, product_id]
         );
-        return product.rows;
+        return product.rows.length;
     };
 
     return module;

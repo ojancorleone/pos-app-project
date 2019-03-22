@@ -53,7 +53,7 @@ module.exports = client => {
             let existingCart    = await modelCart.checkCartExists(req.body.user_id);
             let existingProduct = await modelCartProducts.checkProductCartExists(existingCart.id, req.body.product_id);
 
-            if(existingProduct.length > 0)
+            if(existingProduct > 0)
                 return reply.badRequest(req, res, "product already exist in cart");
 
             if (existingCart === undefined)
