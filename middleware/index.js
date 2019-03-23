@@ -13,6 +13,7 @@ const Constant          = require("./helper/constants");
 
 /** Initialization Controller */
 const CacheRedis        = require("./controller/cacheRedis/cacheRedis");
+const Product           = require("./controller/product/product");
 
 /** Start Application Running */
 const app = express();
@@ -42,12 +43,17 @@ app.use(
     })
 );
 
-server      = http.createServer(app);
-const redis = CacheRedis(client, Redis);
+server        = http.createServer(app);
+const redis   = CacheRedis(client, Redis);
+const product = Product();
 
 //Service Redis
 app.get("/redis/:id", redis.getCache);
 app.post("/redis", redis.postCache);
+
+//Service Product
+app.get("/products/:page/:items_per_page", product.getProducts);
+app.get("/product/:id", product.getProduct);
 
 const reply = HelperResponse();
 app.all("*", (req, res) => {
