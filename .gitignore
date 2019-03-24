@@ -5,6 +5,8 @@
 /middleware/node_modules
 /frontend/node_modules
 /backend/.env
+/frontend/.env
+/middle/.env
 
 /.pnp
 .pnp.js

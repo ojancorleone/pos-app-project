@@ -1,9 +1,9 @@
-// const ModelUser = require("./../../model/user/user");
+const ModelRedis = require("../model/redis");
 // const HelperResponse = require("./../helper/response");
 // const Constants = require("./../helper/constants");
 
-module.exports = () => {
-  // const modelUser = ModelUser(client);
+module.exports = (client) => {
+   const modelRedis = ModelRedis(client);
   // const reply = HelperResponse();
 
   let module = {};
@@ -47,6 +47,22 @@ module.exports = () => {
   //   }
   //   next();
   // };
+
+    //getAuthInfo
+  //   module.checkValidateToken = async (req, res) => {
+
+  //     const tokenId    = req.params.tokenId;
+
+  //     if(tokenId.length < 20)
+  //         return reply.badRequest(req, res, "Invalid parameter request");
+  //         await modelRedis.selectRedisStore(tokenId, (error, result) => {
+  //           if(result)
+  //             return result;
+  //           if(error)
+  //               return reply.error(req, res, error);
+  //         });
+  // };
+
 
   return module;
 };

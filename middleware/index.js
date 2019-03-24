@@ -12,8 +12,8 @@ const HelperResponse    = require("./helper/response");
 const Constant          = require("./helper/constants");
 
 /** Initialization Controller */
-const CacheRedis        = require("./controller/cacheRedis/cacheRedis");
-const Product           = require("./controller/product/product");
+const Auth              = require("./api/auth/auth");
+const Product           = require("./api/product/product");
 
 /** Start Application Running */
 const app = express();
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
     next();
   });
 
-const client = Redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL);
+const redis = Redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL);
 
 app.use(express.json());
 app.use(
@@ -44,12 +44,12 @@ app.use(
 );
 
 server        = http.createServer(app);
-const redis   = CacheRedis(client, Redis);
+const auth    = Auth(redis);
 const product = Product();
 
 //Service Redis
-app.get("/redis/:id", redis.getCache);
-app.post("/redis", redis.postCache);
+app.get("/auth/:tokenId", auth.getAuth);
+app.post("/auth", auth.createAuth);
 
 //Service Product
 app.get("/products/:page/:items_per_page", product.getProducts);

@@ -5,7 +5,7 @@ module.exports = () => {
     let module = {}
 
     module.generateToken = (userId) =>{
-        const token = crypto.pbkdf2Sync(`${userId}|${Math.floor(Date.now())}`, 'salt', 10, 64, 'sha512');
+        const token = crypto.pbkdf2Sync(`${userId}|${Date.now()}`, 'salt', 10, 16, 'sha512');
         return token.toString('hex');
     }
 

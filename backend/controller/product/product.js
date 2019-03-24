@@ -25,8 +25,6 @@ module.exports = client => {
     module.getProducts = async (req, res) => {
         if(!permission.validateHandShake(req.body.keyword, "getProducts"))
             return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.items_per_page <= 0 || req.params.page < 0)
-            return reply.badRequest(req, res, "Invalid parameter item_per_page or page");
         try{
             const products = await modelProduct.selectProducts(
                 req.params.items_per_page,
@@ -42,8 +40,6 @@ module.exports = client => {
     module.getProduct = async (req, res) => {
         if(!permission.validateHandShake(req.body.keyword, "getProduct"))
             return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.id <= 0)
-            return reply.badRequest(req, res, "Invalid parameter id");
         try{
             const product = await modelProduct.selectProduct("id",req.params.id);
             if(product == undefined)
@@ -73,8 +69,6 @@ module.exports = client => {
     module.patchProduct = async (req, res) => {
         if(!permission.validateHandShake(req.body.keyword, "patchProduct"))
             return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.id <= 0)
-            return reply.badRequest(req, res, "Invalid parameter id");
         try{
             const product = await modelProduct.updateProduct(req.params.id, req.body);
             return reply.created(req, res, product);
@@ -87,8 +81,6 @@ module.exports = client => {
     module.deleteProduct = async (req, res) => {
         if(!permission.validateHandShake(req.body.keyword, "deleteProduct"))
             return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.id <= 0)
-            return reply.badRequest(req, res, "Invalid parameter id");
         try{
             const product = await modelProduct.deleteProduct(req.params.id);
             return reply.created(req, res, product);
