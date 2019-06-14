@@ -9,9 +9,9 @@ module.exports = () => {
         return token.toString('hex');
     }
 
-    module.generateHandShake = (clientKeyword, type) => {
-        const Keyword = crypto.pbkdf2Sync(`${process.env.KEYWORD}|${type}`, 'salt', 10, 16, 'sha512');
-        return Keyword.toString('hex');
+    module.generateHandShake = (type) => {
+        const keyword = crypto.pbkdf2Sync(`${process.env.KEYWORD}|${type}`, 'salt', 10, 16, 'sha512');
+        return keyword.toString('hex');
     }
 
     return module;

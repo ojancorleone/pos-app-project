@@ -6,7 +6,7 @@ create table products (
     category_id bigint not null,
     stock bigint not null,
     price bigint not null,
-    discounted_price bigint,
+    discounted_price bigint DEFAULT 0,
     image_url text,
     created_at timestamptz DEFAULT now(),
     updated_at timestamptz DEFAULT now(),

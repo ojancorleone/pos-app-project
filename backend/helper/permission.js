@@ -1,12 +1,12 @@
 
-const ModelUser = require("./../model/user/user");
-const HelperResponse = require("./../helper/response");
-const Constants = require("./../helper/constants");
-const crypto            = require('crypto');
+const ModelUser       = require("./../model/user");
+const HelperResponse  = require("./../helper/response");
+const Constants       = require("./../helper/constants");
+const Crypto          = require('crypto');
 
 module.exports = client => {
   const modelUser = ModelUser(client);
-  const reply = HelperResponse();
+  const reply     = HelperResponse();
 
   let module = {};
 
@@ -51,9 +51,9 @@ module.exports = client => {
   };
 
   module.validateHandShake = (clientKeyword, type) => {
-      const backendKeyword = crypto.pbkdf2Sync(`${process.env.KEYWORD}|${type}`, 'salt', 10, 16, 'sha512');
-      console.log(`handshake-keyword : ${backendKeyword.toString('hex')}`);
-      console.log(`client-keyword  : ${clientKeyword}`);
+      const backendKeyword = Crypto.pbkdf2Sync(`${process.env.KEYWORD}|${type}`, 'salt', 10, 16, 'sha512');
+      console.log(`server-keyword \t: ${backendKeyword.toString('hex')}`);
+      console.log(`client-keyword \t: ${clientKeyword}`);
       if(clientKeyword != backendKeyword.toString('hex'))
         return false;
       else return true;

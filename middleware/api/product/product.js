@@ -17,7 +17,7 @@ module.exports = () => {
         if(req.params.items_per_page <= 0 || req.params.page < 0)
             return reply.badRequest(req, res, "Invalid parameter item_per_page or page");
         try{
-            const response = await request.httpGetRequest(`/products/${req.params.page}/${req.params.items_per_page}`, "getProducts");
+            const response = await request.httpGET(`products/${req.params.page}/${req.params.items_per_page}`, "getProducts");
             return reply.success(req, res, response.data);
         }catch(e){
             return reply.error(req, res, e);
@@ -29,7 +29,7 @@ module.exports = () => {
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid parameter id");
         try{
-            const response = await request.httpGetRequest(`/product/${req.params.id}`, "getProduct");
+            const response = await request.httpGET(`product/${req.params.id}`, "getProduct");
             if(response == undefined)
                 return reply.notFound(req, res, "Product not Found");
             else
@@ -42,7 +42,7 @@ module.exports = () => {
     //postProduct
     module.postProduct = async (req, res) => {
         try{
-            const response =  await request.httpPostRequest(`/product`, "postProduct", req.body);
+            const response =  await request.httpPOST(`product`, "postProduct", req.body);
             return reply.created(req, res, response.data);
         }catch(e){
             return reply.error(req, res, e);
@@ -54,7 +54,7 @@ module.exports = () => {
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid Parameter id");
         try{
-            const response =  await request.httpPatchRequest(`/product/${req.params.id}`, "patchProduct", req.body);
+            const response =  await request.httpPATCH(`product/${req.params.id}`, "patchProduct", req.body);
             return reply.created(req, res, response.data);
         }catch(e){
             return reply.error(req, res, e);
@@ -66,7 +66,7 @@ module.exports = () => {
         if(req.params.id <= 0)
             return reply.badRequest(req, res, "Invalid Parameter id");
         try{
-            const response =  await request.httpDeleteRequest(`/product/${req.params.id}`, "deleteProduct");
+            const response =  await request.httpDELETE(`product/${req.params.id}`, "deleteProduct");
             return reply.created(req, res, response.data);
         }catch(e){
             return reply.error(req, res, e);
