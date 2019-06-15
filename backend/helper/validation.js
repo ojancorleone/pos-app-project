@@ -1,14 +1,20 @@
+const { validationResult }  = require('express-validator/check');
+const HelperResponse        = require("./../helper/response");
+const HelperPermission      = require("./../helper/permission");
 module.exports = () => {
     
-    let module = {};
+    let module          = {};
+    const reply         = HelperResponse();
+    const permission    = HelperPermission();
 
-    module.allMandatoryFieldsExists = (requestBody, mandatoryFields) => {
-        let allMandatoryExists = true;
-        mandatoryFields.map(field =>{
-            if(!Object.keys(requestBody).includes(field))
-                allMandatoryExists = false;
-        });
-        return allMandatoryExists
+    module.mandatoryFieldsExist = async (req, res, next) =>{
+        const errors = validationResult(req);
+        if (!errors.isEmpty())
+            return reply.badRequest(req, res, errors.array());
+        if(!permission.validateHandShake(req.headers.keyword, req.url))
+            return reply.unauthorized(req, res, "Invalid Keywords");
+        next();
     };
+
     return module;
 }

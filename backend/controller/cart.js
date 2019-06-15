@@ -2,8 +2,6 @@ const ModelCart         = require("./../model/cart");
 const ModelCartProducts = require("./../model/carts_products");
 
 const HelperResponse    = require("./../helper/response");
-const HelperValidation  = require("./../helper/validation");
-const HelperPermission  = require("./../helper/permission");
 const HelperCommon      = require("./../helper/common");
 
 module.exports = client => {
@@ -11,21 +9,13 @@ module.exports = client => {
     let module                  = {};
 
     const reply                 = HelperResponse();
-    const validate              = HelperValidation();
-    const permission            = HelperPermission();
     const common                = HelperCommon();
 
     const modelCart             = ModelCart(client);
     const modelCartProducts     = ModelCartProducts(client);
 
-    module.mandatoryFields      = ["product_id", "user_id", "quantity"];
-
     // getCarts
     module.getCarts = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "getCarts"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if (req.params.items_per_page < 0 || req.params.items_per_page <= 0)
-            return reply.badRequest(req,res,"invalid parameter items_per_page or page");
         try {
             const carts = await modelCart.selectCarts(req.params.items_per_page, req.params.page, req.params.status);
             return reply.success(req, res, carts);
@@ -36,11 +26,6 @@ module.exports = client => {
 
     // getCart
     module.getCart = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "getCart"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if (req.params.id <= 0)
-            return reply.badRequest(req, res, "invalid parameter id");
-
         try {
             let cart = await modelCart.selectCart("id", req.params.id);
             if (cart === undefined){
@@ -59,12 +44,6 @@ module.exports = client => {
 
     //addProductToCart
     module.postProductToCart = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "postProductToCart"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-
-        if (!validate.allMandatoryFieldsExists(req.body, module.mandatoryFields))
-            return reply.badRequest(req, res, "incomplete req.body fields");
-
         try {
             await client.query("BEGIN");
 
@@ -92,26 +71,19 @@ module.exports = client => {
 
     // updateQuantityProductToCart
     module.patchQuantityProductToCart = async (req, res) => {
-        let cart = null;
-
-        if(!permission.validateHandShake(req.headers.keyword, "patchQuantityProductToCart"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-
-        if (!validate.allMandatoryFieldsExists(req.body, module.mandatoryFields))
-            return reply.badRequest(req, res, "incomplete req.body fields");
-
         try {
+            let cart = null;
             await client.query("BEGIN");
             const existingCart = await modelCart.checkCartExists(req.body.user_id);
 
-        if (req.body.quantity == "0")
-            cart = await modelCartProducts.deleteProductFromCart(existingCart.id,req.body.product_id);
-        else 
-            cart = await modelCartProducts.updateQuantityProductFromCart(
-                existingCart.id,
-                req.body.product_id,
-                req.body.quantity
-            );
+            if (req.body.quantity == "0")
+                cart = await modelCartProducts.deleteProductFromCart(existingCart.id,req.body.product_id);
+            else 
+                cart = await modelCartProducts.updateQuantityProductFromCart(
+                    existingCart.id,
+                    req.body.product_id,
+                    req.body.quantity
+                );
             await client.query("COMMIT");
             return reply.created(req, res, cart);
         } catch (e) {
@@ -121,10 +93,6 @@ module.exports = client => {
     };
 
     module.deleteCart = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "deleteCart"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if (req.params.id <= 0)
-            return reply.badRequest(req, res, "invalid parameter id");
         try {
             let cart = null;
             await client.query("BEGIN");

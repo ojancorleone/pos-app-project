@@ -1,28 +1,15 @@
 const ModelCategory     = require("./../model/category");
 const HelperResponse    = require("./../helper/response");
-const HelperValidation  = require("./../helper/validation");
-const HelperPermission  = require("./../helper/permission");
 
 module.exports = client => {
     
     let module = {};
    
-    module.mandatoryFields = [
-        "name", 
-        "logo"
-    ];
-
     const modelCategory     = ModelCategory(client);
     const reply             = HelperResponse();
-    const validate          = HelperValidation();
-    const permission        = HelperPermission();
 
     //getCategories
     module.getCategories = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "getCategories"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.items_per_page <= 0 || req.params.page < 0)
-            return reply.badRequest(req, res, "Invalid parameter item_per_page or page");
         try{
             const categories = await modelCategory.selectCategories(
                 req.params.items_per_page,
@@ -36,10 +23,6 @@ module.exports = client => {
 
     //getCategory
     module.getCategory = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "getCategory"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.id <= 0)
-            return reply.badRequest(req, res, "Invalid parameter id");
         try{
             const category = await modelCategory.selectCategory("id",req.params.id);
             if(category == undefined)
@@ -53,10 +36,6 @@ module.exports = client => {
 
     //postCategory
     module.postCategory = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "postCategory"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if(!validate.allMandatoryFieldsExists(req.body, module.mandatoryFields))
-            return reply.badRequest(req, res, "Invalid parameter request");
         try{
             const category = await modelCategory.insertCategory(req.body);
             return reply.created(req, res, category);
@@ -67,10 +46,6 @@ module.exports = client => {
 
     //patchCategory
     module.patchCategory = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "patchCategory"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.id <= 0)
-            return reply.badRequest(req, res, "Invalid parameter id");
         try{
             const category = await modelCategory.updateCategory(req.params.id, req.body);
             if(category == undefined)
@@ -84,10 +59,6 @@ module.exports = client => {
 
     //deletCategory
     module.deleteCategory = async (req, res) => {
-        if(!permission.validateHandShake(req.headers.keyword, "deleteCategory"))
-            return reply.unauthorized(req, res, "Invalid Keywords");
-        if(req.params.id <= 0)
-            return reply.badRequest(req, res, "Invalid parameter id");
         try{
             const category = await modelCategory.deleteCategory(req.params.id);
             if(category == undefined)
