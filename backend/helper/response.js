@@ -13,7 +13,7 @@ module.exports = () => {
     if (!res.headersSent) {
       res.header("Content-Type", "application/json");
       res.status(200);
-      return res.json( data );
+      return res.json({ data: data });
     }
   };
 

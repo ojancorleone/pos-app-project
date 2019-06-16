@@ -53,9 +53,10 @@ module.exports = client => {
                 existingCart    = await modelCart.insertNewCart(req.body.user_id);
 
             let existingProduct = await modelCartProducts.checkProductCartExists(existingCart.id, req.body.product_id);
-            if(existingProduct > 0)
+            if(existingProduct > 0){
+                await client.query("COMMIT");
                 return reply.badRequest(req, res, "product already exist in cart");
-
+            }
             const cart = await modelCartProducts.insertNewProductToCart(
                 existingCart.id,
                 req.body.product_id,
@@ -64,7 +65,7 @@ module.exports = client => {
             await client.query("COMMIT");
             return reply.created(req, res, cart);
         } catch (e) {
-            await client.query("ROLLBACK");
+            client.query("ROLLBACK");
             return reply.error(req, res, e);
         }
     };

@@ -6,7 +6,7 @@ module.exports = client =>{
     module.selectCategories  = async (items_per_page, page) =>{
         const offset        = (page - 1) * items_per_page || 0;
         const categories    = await client.query(
-            "SELECT * FROM categories ORDER BY id LIMIT ($1) OFFSET ($2);",
+            `SELECT * FROM categories ORDER BY id LIMIT ($1) OFFSET ($2);`,
             [items_per_page, offset]
         );
         return categories.rows;
@@ -14,19 +14,15 @@ module.exports = client =>{
 
     //selectCategory
     module.selectCategory   = async (by, parameter) => {
-        let category;
-        switch(by){
-            case "id" :
-            category = await client.query('SELECT * FROM categories WHERE id = ($1);', 
+        let category = await client.query(`SELECT * FROM categories WHERE ${by} = ($1);`, 
             [parameter]);
-            return category.rows[0];
-        };
+        return category.rows[0];
     };
 
     //insertCategory
     module.insertCategory    = async body => {
         const category  = await client.query(
-            "INSERT INTO categories (name, logo) VALUES ($1, $2) RETURNING *;",
+            `INSERT INTO categories (name, logo) VALUES ($1, $2) RETURNING *;`,
             [body.name, body.logo]
         );
         return category.rows[0];

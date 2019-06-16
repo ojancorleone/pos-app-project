@@ -22,36 +22,35 @@ module.exports = (express, mainDb) => {
     const formCategory  = FormCategory();
     
     const validate      = GlobalValidation();
-    
+
     let api             = express.Router();
 
-    /* :: Service User :: */ 
     api.get("/users", formUser.fieldsGetUsers, validate.global, user.getUsers);
-    api.get("/users/:id", formUser.fieldsGetUser, validate.global, user.getUser);
-    api.post("/users", formUser.fieldsPostUser, validate.global, user.postUser);
-    api.patch("/users/:id", formUser.fieldsPatchUser, validate.global, user.patchUser);
-    api.delete("/users/:id", formUser.fieldsDeleteUser, validate.global, user.deleteUser);
+    api.get("/user/:id", formUser.fieldsGetUser, validate.global, user.getUser);
+    api.post("/user", formUser.fieldsPostUser, validate.global, user.postUser);
+    api.patch("/user/:id", formUser.fieldsPatchUser, validate.global, user.patchUser);
+    api.delete("/user/:id", formUser.fieldsDeleteUser, validate.global, user.deleteUser);
 
     /* :: Service Product :: */ 
     api.get("/products", formProduct.fieldsGetProducts, validate.global, product.getProducts);
-    api.get("/products/:id", formProduct.fieldsGetProduct, validate.global, product.getProduct);
-    api.post("/products", formProduct.fieldsPostProduct, validate.global, product.postProduct);
-    api.patch("/products/:id", formProduct.fieldsPatchProduct, validate.global, product.patchProduct);
-    api.delete("/products/:id", formProduct.fieldsDeleteProduct, validate.global, product.deleteProduct);
+    api.get("/product/:id", formProduct.fieldsGetProduct, validate.global, product.getProduct);
+    api.post("/product", formProduct.fieldsPostProduct, validate.global, product.postProduct);
+    api.patch("/product/:id", formProduct.fieldsPatchProduct, validate.global, product.patchProduct);
+    api.delete("/product/:id", formProduct.fieldsDeleteProduct, validate.global, product.deleteProduct);
 
     /* :: Service Category of Product :: */ 
     api.get("/categories", formCategory.fieldsGetCategories, validate.global, category.getCategories);
-    api.get("/categories/:id", formCategory.fieldsGetCategory, validate.global, category.getCategory);
-    api.post("/categories", formCategory.fieldsPostCategory, validate.global, category.postCategory);
-    api.patch("/categories/:id", formCategory.fieldsPatchCategory, validate.global, category.patchCategory);
-    api.delete("/categories/:id", formCategory.fieldsDeleteCategory, validate.global, category.deleteCategory);
+    api.get("/category/:id", formCategory.fieldsGetCategory, validate.global, category.getCategory);
+    api.post("/category", formCategory.fieldsPostCategory, validate.global, category.postCategory);
+    api.patch("/category/:id", formCategory.fieldsPatchCategory, validate.global, category.patchCategory);
+    api.delete("/category/:id", formCategory.fieldsDeleteCategory, validate.global, category.deleteCategory);
 
     /* :: Service Cart :: */ 
     api.get("/carts", cart.getCarts);
-    api.get("/carts/:id", cart.getCart);
-    api.post("/carts/add", cart.postProductToCart);
-    api.post("/carts/quantity", cart.patchQuantityProductToCart);
-    api.delete("/carts", cart.deleteCart);
+    api.get("/cart/:id", cart.getCart);
+    api.post("/cart/product", cart.postProductToCart);
+    api.post("/cart/quantity", cart.patchQuantityProductToCart);
+    api.delete("/cart/:id", cart.deleteCart);
 
     return api;
 };
