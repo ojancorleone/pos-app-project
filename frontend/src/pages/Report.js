@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './../css/app.css';
-import {Layout, Breadcrumb} from 'antd';
+import TitlePage from './../component/TitlePage';
+import {Layout} from 'antd';
 
 const {Content} = Layout;
 
@@ -9,9 +10,7 @@ class Report extends Component {
   render() {
     return (
         <Content className="content">
-            <Breadcrumb className="breadcumb">
-                <Breadcrumb.Item>Report</Breadcrumb.Item>
-            </Breadcrumb>
+           <TitlePage title="Report"/>
         </Content>
     );
   }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './../css/app.css';
-import {Layout, Breadcrumb, Row, Col, Card, Button, Icon, InputNumber} from 'antd';
-import axios from 'axios';
+import TitlePage from './../component/TitlePage';
+import {Layout, Row, Col, Card, Button, Icon, InputNumber} from 'antd';
+import ProductService from './../service/Products';
 
 const {Content} = Layout;
 const {Meta} = Card;
@@ -23,13 +24,12 @@ class Order extends Component {
     }
 
     collectProducts = (page, item_per_page) =>{
-        axios.get(`${process.env.REACT_APP_API_URL}/products/${page}/${item_per_page}`)
-            .then(res => {
-                const products = res.data.data;
-                if(products)
+        const service   = new ProductService();
+        const result    = service.getProducts(page, item_per_page);
+                if(result){
                     this.setState({
                         products: 
-                            products.map(
+                            result.map(
                                 product =>
                                     <Col span={6} key={product.id}>
                                         <div className="catalog">
@@ -56,15 +56,13 @@ class Order extends Component {
                                     </Col>
                             )
                     });
-            });     
+            }
     }
 
     render() {
         return (
             <Content key="Order" className="content">
-                <Breadcrumb className="breadcumb">
-                    <Breadcrumb.Item>Order</Breadcrumb.Item>
-                </Breadcrumb>
+                 <TitlePage title="Order"/>
                 <Row gutter={6}>
                     <Col span={8}>
                         <Card title="Cart">

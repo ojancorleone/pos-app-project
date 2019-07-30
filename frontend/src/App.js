@@ -3,10 +3,10 @@ import './css/app.css';
 import {Layout} from 'antd';
 import HeaderApp from './component/HeaderApp';
 import FooterApp from './component/FooterApp';
-import Dashboard from './module/dashboard/Dashboard';
-import Order from './module/order/Order';
-import Report from './module/report/Report';
-import Inventory from './module/inventory/Inventory';
+import Dashboard from './pages/Dashboard';
+import Order from './pages/Order';
+import Report from './pages/Report';
+import Inventory from './pages/Inventory';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
 class App extends Component {

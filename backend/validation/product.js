@@ -1,22 +1,24 @@
-const { body, header, query, param } = require('express-validator/check');
+const HelperValidation                  = require('./../helper/validation');
+const { body, header, query, param }    = require('express-validator/check');
 
 module.exports = () => {
 
-        let module      = {}
-        const onHeader  = header('keyword')
-                                .exists().withMessage("keyword doesn't exist")
-                                .not().isEmpty().withMessage("keyword can't be empty");
+        let module              = {}
+        const validation        = HelperValidation(); 
+        const onHeader          = header('keyword')
+                                        .exists().withMessage("keyword doesn't exist")
+                                        .not().isEmpty().withMessage("keyword can't be empty");
 
-        const onQuery   = [
-                        query('page')
-                                .exists().withMessage("page doesn't exist")
-                                .not().isEmpty().withMessage("page can't be empty")
-                                .isNumeric().withMessage("page should be numeric"),
-                        query('items_per_page')
-                                .exists().withMessage("items_per_page doesn't exist")
-                                .not().isEmpty().withMessage("items_per_page can't be empty")
-                                .isNumeric().withMessage("items_per_page should be numeric")
-        ]
+        const onQuery           = [
+                                        query('page')
+                                                .exists().withMessage("page doesn't exist")
+                                                .not().isEmpty().withMessage("page can't be empty")
+                                                .isNumeric().withMessage("page should be numeric"),
+                                        query('items_per_page')
+                                                .exists().withMessage("items_per_page doesn't exist")
+                                                .not().isEmpty().withMessage("items_per_page can't be empty")
+                                                .isNumeric().withMessage("items_per_page should be numeric")
+                                ]
 
         const onParam   =  param('id')
                                 .exists().withMessage("id doesn't exist")
@@ -49,11 +51,11 @@ module.exports = () => {
         ]         
         
 
-        module.fieldsGetProducts        = [onHeader, onQuery]
-        module.fieldsGetProduct         = [onHeader, onParam]
-        module.fieldsPostProduct        = [onHeader, onBody]
-        module.fieldsPatchProduct       = [onHeader, onParam, onBody]
-        module.fieldsDeleteProduct      = [onHeader, onParam]    
+        module.fieldsGetProducts        = [onHeader, onQuery],validation.global;
+        module.fieldsGetProduct         = [onHeader, onParam], validation.global;
+        module.fieldsPostProduct        = [onHeader, onBody], validation.global;
+        module.fieldsPatchProduct       = [onHeader, onParam, onBody], validation.global;
+        module.fieldsDeleteProduct      = [onHeader, onParam], validation.global;
 
     return module;
 }

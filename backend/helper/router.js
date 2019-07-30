@@ -32,11 +32,11 @@ module.exports = (express, mainDb) => {
     api.delete("/user/:id", formUser.fieldsDeleteUser, validate.global, user.deleteUser);
 
     /* :: Service Product :: */ 
-    api.get("/products", formProduct.fieldsGetProducts, validate.global, product.getProducts);
-    api.get("/product/:id", formProduct.fieldsGetProduct, validate.global, product.getProduct);
-    api.post("/product", formProduct.fieldsPostProduct, validate.global, product.postProduct);
-    api.patch("/product/:id", formProduct.fieldsPatchProduct, validate.global, product.patchProduct);
-    api.delete("/product/:id", formProduct.fieldsDeleteProduct, validate.global, product.deleteProduct);
+    api.get("/products", formProduct.fieldsGetProducts,product.getProducts);
+    api.get("/product/:id", formProduct.fieldsGetProduct, product.getProduct);
+    api.post("/product", formProduct.fieldsPostProduct, product.postProduct);
+    api.patch("/product/:id", formProduct.fieldsPatchProduct, product.patchProduct);
+    api.delete("/product/:id", formProduct.fieldsDeleteProduct, product.deleteProduct);
 
     /* :: Service Category of Product :: */ 
     api.get("/categories", formCategory.fieldsGetCategories, validate.global, category.getCategories);

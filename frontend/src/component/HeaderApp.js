@@ -7,10 +7,6 @@ const {Header} = Layout;
 
 class HeaderApp extends Component {
 
-  handleChangeMenu = (key,value) =>{
-    this.props.onMenuChange(key,value);
-  }
-
   render() {
     return (
           <Header>
