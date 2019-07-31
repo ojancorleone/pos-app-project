@@ -3,23 +3,36 @@ import './../css/app.css';
 import TitlePage from './../component/TitlePage';
 import {Layout, Row, Col, Card, Button, Icon, InputNumber} from 'antd';
 import ProductService from './../service/Products';
+import TableCart from './../component/TableCart';
 
 const {Content} = Layout;
 const {Meta} = Card;
 
 class Order extends Component {
 
-    state = {products : [], carts : []};
+    state = {
+            products : [], 
+            carts : []
+    };
 
     componentDidMount = () =>{
         this.collectProducts(1,5);
     }
 
-    addToCart = (productId) =>{
-        let listCart = this.state.carts;
-        let quantity = document.getElementById("Qty_"+productId).value;
-        console.log("Product : "+productId+", Quantity : "+quantity);
-        listCart.push(productId);
+    addToCart = (product) =>{
+        let listCart    = this.state.carts;
+        let quantity    = document.getElementById("Qty_"+product.id).value;
+        let foundIndex  = listCart.findIndex(el => el.id === product.id);
+        if (foundIndex >= 0){
+            product['quantity']         = parseInt(listCart[foundIndex].quantity) + parseInt(quantity);
+            product['totalPrice']       = parseInt(listCart[foundIndex].price) + parseInt(listCart[foundIndex].price) * parseInt(quantity);
+            listCart[foundIndex]        = product
+        }else{
+            product['quantity']         = parseInt(quantity);
+            product['totalPrice']       = parseInt(product.price) * parseInt(quantity);
+            listCart.push(product);
+        }
+
         this.setState({carts: listCart});
     }
 
@@ -37,8 +50,8 @@ class Order extends Component {
                                             hoverable
                                             cover={<img alt="example" src="http://placehold.jp/150x70.png" />}
                                             actions={[  
-                                                        <Button onClick={(e)=>{this.addToCart(product.id)}}>
-                                                            <Icon type="shopping-cart"/> Add
+                                                        <Button onClick={(e)=>{this.addToCart(product)}} block>
+                                                            <Icon type="shopping-cart"/>
                                                         </Button>,
                                                         <InputNumber 
                                                             id={"Qty_"+product.id}
@@ -59,13 +72,16 @@ class Order extends Component {
             }
     }
 
+
     render() {
+ 
         return (
             <Content key="Order" className="content">
                  <TitlePage title="Order"/>
                 <Row gutter={6}>
                     <Col span={8}>
                         <Card title="Cart">
+                           <TableCart dataSource={this.state.carts}/>
                         </Card>
                     </Col>
                     <Col span={16}>
