@@ -9,8 +9,6 @@ module.exports = client => {
     const modelUser     = ModelUser(client);
     const reply         = HelperResponse();
 
-
-
     //getUsers
     module.getUsers = async (req, res) => {
         try {

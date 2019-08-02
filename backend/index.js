@@ -5,6 +5,7 @@ const http              = require("http");
 const express           = require("express");
 const bodyParser        = require("body-parser");
 const {Client}          = require("pg");
+
 const Constants         = require("./helper/constants");
 
 /** Initialization Helper */
@@ -17,17 +18,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Headers", "*");
-    res.header("Content-Type", "application/json");
-    res.header("Access-Control-Allow-Credentials", "true");
-    if (req.method === "OPTIONS")
-      return res.status(200).end();
-    next();
-});
-
 const mainDb  = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl : process.env.SSL === "true" ? true : false
@@ -36,11 +26,18 @@ mainDb.connect();
   
 app.use(express.json());
 
+// app.all('*', (req, res, next) => {
+//     console.log(req.url);
+  
+//     next();
+// });
+
+app.use('/v1', HelperRouter(express, mainDb));
+
 const server    = http.createServer(app);
-const router    = HelperRouter(express, mainDb);
-app.use('/v1', router);
+
 app.all("*", (req, res) => {
-  return reply.notFound(req, res, "invalid route");
+    return reply.notFound(req, res, "invalid route");
 });
 
 process.env.PORT  = process.env.PORT || 8080;

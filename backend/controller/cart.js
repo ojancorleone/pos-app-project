@@ -62,7 +62,7 @@ module.exports = client => {
                 req.body.product_id,
                 req.body.quantity
             );
-            await client.query("COMMIT");
+            client.query("COMMIT");
             return reply.created(req, res, cart);
         } catch (e) {
             client.query("ROLLBACK");
@@ -85,10 +85,10 @@ module.exports = client => {
                     req.body.product_id,
                     req.body.quantity
                 );
-            await client.query("COMMIT");
+            client.query("COMMIT");
             return reply.created(req, res, cart);
         } catch (e) {
-            await client.query("ROLLBACK");
+            client.query("ROLLBACK");
             return reply.error(req, res, e);
         }
     };
@@ -99,11 +99,11 @@ module.exports = client => {
             await client.query("BEGIN");
             const existingCart  = await modelCart.checkCartExists(req.body.user_id);
             if(existingCart == undefined){
-                await client.query("ROLLBACK");
+                client.query("ROLLBACK");
                 return reply.notFound(req, res, "Cart doesnt exist");
             }else{
                 cart = await modelCartProducts.emptyProductsFromCart(existingCart.id);
-                await client.query("COMMIT");
+                client.query("COMMIT");
                 return reply.created(req, res, cart);
             }
         } catch (e) {

@@ -1,8 +1,10 @@
 
+require("dotenv").config();
 const ModelUser       = require("./../model/user");
 const HelperResponse  = require("./../helper/response");
 const Constants       = require("./../helper/constants");
 const Crypto          = require('crypto');
+const basicAuth       = require('basic-auth');
 
 module.exports = client => {
   const modelUser = ModelUser(client);
@@ -50,13 +52,13 @@ module.exports = client => {
     next();
   };
 
-  module.validateHandShake = (clientKeyword, type) => {
-      const backendKeyword = Crypto.pbkdf2Sync(`${process.env.KEYWORD}|${type}`, 'salt', 10, 16, 'sha512');
+  module.validateAuthorization = (auth, password) => {
+      const backendKeyword = Crypto.pbkdf2Sync(`${process.env.API_CREDENTIAL}|${password}`, 'salt', 10, 16, 'sha512');
+      console.log(`format-keyword \t: ${process.env.API_CREDENTIAL}|${password}`);
       console.log(`server-keyword \t: ${backendKeyword.toString('hex')}`);
-      console.log(`client-keyword \t: ${clientKeyword}`);
-      if(clientKeyword != backendKeyword.toString('hex'))
-        return false;
-      else return true;
+      console.log(`client-keyword \t: ${auth.name}`);
+      console.log(`client-password \t: ${auth.pass}`);
+      return (auth.name === process.env.API_CREDENTIAL && auth.pass === backendKeyword.toString('hex'));
   }
 
   return module;

@@ -4,11 +4,11 @@ const Product           = require("./../controller/product");
 const Category          = require("./../controller/category");
 const Cart              = require("./../controller/cart");
 
-const FormUser          = require("./../validation/user");
-const FormProduct       = require("./../validation/product");
-const FormCategory      = require("./../validation/category");
+const FormUser          = require("./../form/user");
+const FormProduct       = require("./../form/product");
+const FormCategory      = require("./../form/category");
 
-const GlobalValidation  = require("./../helper/validation");
+const HelperValidation  = require('./../helper/validation');
 
 module.exports = (express, mainDb) => {
 
@@ -20,30 +20,31 @@ module.exports = (express, mainDb) => {
     const formUser      = FormUser();
     const formProduct   = FormProduct();
     const formCategory  = FormCategory();
-    
-    const validate      = GlobalValidation();
+
+    const validation    = HelperValidation().global;
 
     let api             = express.Router();
 
-    api.get("/users", formUser.fieldsGetUsers, validate.global, user.getUsers);
-    api.get("/user/:id", formUser.fieldsGetUser, validate.global, user.getUser);
-    api.post("/user", formUser.fieldsPostUser, validate.global, user.postUser);
-    api.patch("/user/:id", formUser.fieldsPatchUser, validate.global, user.patchUser);
-    api.delete("/user/:id", formUser.fieldsDeleteUser, validate.global, user.deleteUser);
+    /* :: Service user :: */ 
+    api.get("/users", formUser.fieldsGetUsers, validation, user.getUsers);
+    api.get("/user/:id", formUser.fieldsGetUser,validation, user.getUser);
+    api.post("/user", formUser.fieldsPostUser, validation, user.postUser);
+    api.patch("/user/:id", formUser.fieldsPatchUser, validation, user.patchUser);
+    api.delete("/user/:id", formUser.fieldsDeleteUser, validation, user.deleteUser);
 
     /* :: Service Product :: */ 
-    api.get("/products", formProduct.fieldsGetProducts,product.getProducts);
-    api.get("/product/:id", formProduct.fieldsGetProduct, product.getProduct);
-    api.post("/product", formProduct.fieldsPostProduct, product.postProduct);
-    api.patch("/product/:id", formProduct.fieldsPatchProduct, product.patchProduct);
-    api.delete("/product/:id", formProduct.fieldsDeleteProduct, product.deleteProduct);
+    api.get("/products", formProduct.fieldsGetProducts, validation, product.getProducts);
+    api.get("/product/:id", formProduct.fieldsGetProduct,validation, product.getProduct);
+    api.post("/product", formProduct.fieldsPostProduct, validation, product.postProduct);
+    api.patch("/product/:id", formProduct.fieldsPatchProduct, validation, product.patchProduct);
+    api.delete("/product/:id", formProduct.fieldsDeleteProduct, validation, product.deleteProduct);
 
     /* :: Service Category of Product :: */ 
-    api.get("/categories", formCategory.fieldsGetCategories, validate.global, category.getCategories);
-    api.get("/category/:id", formCategory.fieldsGetCategory, validate.global, category.getCategory);
-    api.post("/category", formCategory.fieldsPostCategory, validate.global, category.postCategory);
-    api.patch("/category/:id", formCategory.fieldsPatchCategory, validate.global, category.patchCategory);
-    api.delete("/category/:id", formCategory.fieldsDeleteCategory, validate.global, category.deleteCategory);
+    api.get("/categories", formCategory.fieldsGetCategories, validation, category.getCategories);
+    api.get("/category/:id", formCategory.fieldsGetCategory, validation, category.getCategory);
+    api.post("/category", formCategory.fieldsPostCategory, validation, category.postCategory);
+    api.patch("/category/:id", formCategory.fieldsPatchCategory, validation, category.patchCategory);
+    api.delete("/category/:id", formCategory.fieldsDeleteCategory, validation, category.deleteCategory);
 
     /* :: Service Cart :: */ 
     api.get("/carts", cart.getCarts);
@@ -51,6 +52,7 @@ module.exports = (express, mainDb) => {
     api.post("/cart/product", cart.postProductToCart);
     api.post("/cart/quantity", cart.patchQuantityProductToCart);
     api.delete("/cart/:id", cart.deleteCart);
+
 
     return api;
 };

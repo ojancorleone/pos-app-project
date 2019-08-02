@@ -21,15 +21,15 @@ class Order extends Component {
 
     addToCart = (product) =>{
         let listCart    = this.state.carts;
-        let quantity    = document.getElementById("Qty_"+product.id).value;
+        let quantity    = parseInt(document.getElementById("Qty_"+product.id).value);
         let foundIndex  = listCart.findIndex(el => el.id === product.id);
         if (foundIndex >= 0){
-            product['quantity']         = parseInt(listCart[foundIndex].quantity) + parseInt(quantity);
-            product['totalPrice']       = parseInt(listCart[foundIndex].price) + parseInt(listCart[foundIndex].price) * parseInt(quantity);
+            product['quantity']         = listCart[foundIndex].quantity + quantity;
+            product['totalPrice']       = listCart[foundIndex].price + (listCart[foundIndex].price * quantity);
             listCart[foundIndex]        = product
         }else{
-            product['quantity']         = parseInt(quantity);
-            product['totalPrice']       = parseInt(product.price) * parseInt(quantity);
+            product['quantity']         = quantity;
+            product['totalPrice']       = product.price * quantity;
             listCart.push(product);
         }
 
@@ -50,7 +50,7 @@ class Order extends Component {
                                             hoverable
                                             cover={<img alt="example" src="http://placehold.jp/150x70.png" />}
                                             actions={[  
-                                                        <Button onClick={(e)=>{this.addToCart(product)}} block>
+                                                        <Button onClick={(e)=>{this.addToCart(product)}}>
                                                             <Icon type="shopping-cart"/>
                                                         </Button>,
                                                         <InputNumber 
